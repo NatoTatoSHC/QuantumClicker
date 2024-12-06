@@ -26,6 +26,14 @@ section#right-panel {
     top: 0px;
     right: 0px;
     position: absolute;
+    
+}
+section#store {
+    overflow-y: scroll;
+    overflow-x: hidden;
+    border: none;
+    padding: 5px;
+    text-overflow:inherit;
 }
 section#upgrades {
     background-color: blue;
@@ -152,4 +160,9 @@ h1#sun_count {
     position: relative;
     top: -230%;
     left: 85%;
+}
+h1#bio_count {
+    position: relative;
+    top: -230%;
+    left: 85%
 }
