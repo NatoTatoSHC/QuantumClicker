@@ -10,6 +10,13 @@ section#left-panel {
     color: white;
     
 }
+section#mid-zone {
+    width: 50%;
+    height: 100%;
+    position:absolute;
+    top:0;
+    left:30%;
+}
 body {
     overflow: hidden;
 }
@@ -26,11 +33,10 @@ section#right-panel {
     top: 0px;
     right: 0px;
     position: absolute;
-    
+    overflow-y: scroll;
 }
 section#store {
     overflow-y: scroll;
-    overflow-x: hidden;
     border: none;
     padding: 5px;
     text-overflow:inherit;
@@ -38,6 +44,7 @@ section#store {
 section#upgrades {
     background-color: blue;
     height: 35%;
+    overflow-y: scroll;
 }
 img.clickup {
     width: 100%;
@@ -165,4 +172,14 @@ h1#bio_count {
     position: relative;
     top: -230%;
     left: 85%
+}
+div.vispanel {
+    width:100%;
+    height: 20%;
+    background: blue;
+}
+h1#nuke_count {
+    position: relative;
+    top:-230%;
+    left: 85%;
 }
