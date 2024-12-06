@@ -31,8 +31,9 @@
                 <div class="buyitem" id="clicker"><img src="src/cursor.png" class="storeimg"/><h1 class="storetext">Cursor</h1><h1 class="storecost" id="cursorprice">15 Units</h1><h1 id="cursor_count"></h1></div>
                 <div class="buyitem" id="hydro"><img src="src/dam.png" class="storeimg"/><h1 class="storetext">Hydropower</h1><h1 class="storecost" id="hydroprice">100 Units</h1><h1 id="hydro_count"></h1></div>
                 <div class="buyitem" id="geo"><img src="src/volcan.png" class="storeimg"/><h1 class="storetext">Geothermal</h1><h1 class="storecost" id="geoprice">1100 Units</h1><h1 id="geo_count"></h1></div>
-                <div class="buyitem" id="wind"><img src="src/wind.png" class="storeimg"/><h1 class="storetext">Wind</h1><h1 class="storecost" id="windprice">12000 Units</h1><h1 id="wind_count"></h1></div>
-                <div class="buyitem" id="sun"><img src="src/sun.png" class="storeimg"/><h1 class="storetext">Solar Energy</h1><h1 class="storecost" id="sunprice">130000 Units</h1><h1 id="sun_count"></h1></div>
+                <div class="buyitem" id="wind"><img src="src/wind.png" class="storeimg"/><h1 class="storetext">Turbine</h1><h1 class="storecost" id="windprice">12000 Units</h1><h1 id="wind_count"></h1></div>
+                <div class="buyitem" id="sun"><img src="src/sun.png" class="storeimg"/><h1 class="storetext">Solar Panel</h1><h1 class="storecost" id="sunprice">130000 Units</h1><h1 id="sun_count"></h1></div>
+                <div class="buyitem" id="bio"><img src="src/bio.png" class="storeimg"/><h1 class="storetext">Biofuel</h1><h1 class="storecost" id="bioprice">1400000 Units</h1><h1 id="bio_count"></h1></div>
             </section>
         </section>
         <script type="text/javascript">
@@ -89,11 +90,16 @@
             var sunPrice = 130000;
             var clicksPSSun = (suns * 260) * sunMult;
             
+            //bio
+            var bios = 0;
+            var bioMult = 1;
+            var bioPrice = 1400000;
+            var clicksPSBio = (bios * 1400) * bioMult;
             
             //general
             var name = "My Laboratory";
             var clicks = 0;
-            var clicksPS = (clicksPSCursor + clicksPSDam + clicksPSVolcan + clicksPSWind + clicksPSSun);
+            var clicksPS = (clicksPSCursor + clicksPSDam + clicksPSVolcan + clicksPSWind + clicksPSSun + clicksPSBio);
             document.getElementById("amountPS").innerHTML = clicksPS.toString() + " Units Per Second";
 
             //elements
@@ -104,6 +110,7 @@
             var eleVolcanPrice = document.getElementById("geoprice");
             var eleWindPrice = document.getElementById("windprice");
             var eleSunPrice = document.getElementById("sunprice");
+            var eleBioPrice = document.getElementById("bioprice");
 
             //begining function
             window.onload = function() {
@@ -186,6 +193,18 @@
                 } else {
                     sunMult = 1;
                 }
+                if (localStorage.bios != undefined) {
+                    bios = localStorage.bios;
+                    document.getElementById("bio_count").innerHTML = bios;
+                } else {
+                    bios = 0;
+                    document.getElementById("bio_count").innerHTML = bios;
+                }
+                if (localStorage.BioMult != undefined) {
+                    bioMult = localStorage.BioMult;
+                } else {
+                    bioMult = 1;
+                }
                 
                 //prices;
                 cursorPrice = price(15, cursors);
@@ -198,6 +217,8 @@
                 eleWindPrice.innerHTML = windPrice + " Units"
                 sunPrice = price(130000, suns);
                 pricedater(eleSunPrice, sunPrice);
+                bioPrice = price(1400000, bios);
+                pricedater(eleBioPrice, bioPrice);
 
                 //per seconds
                 clicksPSCursor = cursors * cursorMult;
@@ -205,7 +226,8 @@
                 clicksPSVolcan = (volcan * 8) * volcanMult;
                 clicksPSWind = (winds * 42) * windMult;
                 clicksPSSun = (suns * 260) * sunMult;
-                clicksPS = ((clicksPSCursor + clicksPSDam) + (clicksPSVolcan + clicksPSWind) + clicksPSSun);
+                clicksPSBio = (bios * 1400) * bioMult;
+                clicksPS = ((clicksPSCursor + clicksPSDam) + (clicksPSVolcan + clicksPSWind) + clicksPSSun + clicksPSBio);
                 document.getElementById("amountPS").innerHTML = clicksPS + " Units Per Second";
                 
             };
@@ -221,6 +243,7 @@
             document.getElementById("reset").onclick = function() {
                 var resornot = confirm("Are you sure you would like to reset?");
                 if (resornot == true) {
+                    //vars
                     clicks = 0;
                     cursorMult = 1;
                     damMult = 1;
@@ -232,6 +255,12 @@
                     volcanMult = 1;
                     suns = 0;
                     sunMult = 1;
+                    bios = 0
+                    bioMult = 1;
+
+                    //prices
+                    bioPrice = price(1400000, bios);
+                    eleBioPrice.innerHTML = "1.40M Units"
                     sunPrice = price(130000, suns);
                     eleSunPrice.innerHTML = "130000 Units";
                     windPrice = price(12000, winds);
@@ -242,10 +271,16 @@
                     eleCursorPrice.innerHTML = "15 Units";
                     damPrice = price(100, dams);
                     eleDamPrice.innerHTML = "100 Units";
+
+                    //CPS
                     clicksPSCursor = cursors * cursorMult;
                     clicksPSDam = (dams * 5) * damMult;
                     clicksPSVolcan = (volcan * 8) * volcanMult;
                     clicksPSWind = (winds * 42) * windMult;
+                    clicksPSSun = (suns * 260) * sunMult ;
+                    clicksPSBio = (bios * 1400) * bioMult;
+
+                    //update
                     updatePS();
                     updateCount();
                     document.getElementById("cursor_count").innerHTML = cursors;
@@ -253,6 +288,8 @@
                     document.getElementById("geo_count").innerHTML = volcan;
                     document.getElementById("wind_count").innerHTML = winds;
                     document.getElementById("sun_count").innerHTML = suns;
+                    document.getElementById("bio_count").innerHTL = bios;
+
                     resornot = null;
                 }
             };
@@ -271,6 +308,8 @@
                 localStorage.winds = winds;
                 localStorage.suns = suns;
                 localStorage.SunMult = sunMult;
+                localStorage.bios = bios;
+                localStorage.BioMult = bioMult;
             };
 
             //naming function
@@ -345,7 +384,7 @@
                
             }
             function updatePS() {
-                clicksPS = (clicksPSCursor + clicksPSDam + clicksPSVolcan + clicksPSWind + clicksPSSun);
+                clicksPS = (clicksPSCursor + clicksPSDam + clicksPSVolcan + clicksPSWind + clicksPSSun + clicksPSBio);
                 amountPS.innerHTML = clicksPS + " Units Per Second";
             }
 
@@ -433,6 +472,18 @@
                     sunPrice = price(130000, suns);
                     pricedater(eleSunPrice, sunPrice);
                     clicksPSSun = (suns * 260) * sunMult;
+                    updatePS();
+                }
+            };
+            document.getElementById("bio").onclick = function() {
+                if (clicks >= bioPrice) {
+                    clicks -= bioPrice;
+                    updateCount();
+                    bios++;
+                    document.getElementById("bio_count").innerHTML = bios;
+                    bioPrice = price(1400000, bios);
+                    pricedater(eleBioPrice, bioPrice);
+                    clicksPSBio = (bios * 1400) * bioMult;
                     updatePS();
                 }
             };
