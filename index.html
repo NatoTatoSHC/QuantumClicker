@@ -19,6 +19,9 @@
             <p id="version">Unfinished Version</p>
             <p id="info">Not For Moblie Use - Stay In Classic Window</p>
         </section>
+        <section id="mid-zone">
+            <div class="vispanel" id="dams">Visual Panels Are Not Ready</div>
+        </section>
         <section id="right-panel">
             <section id="upgrades">
                 <div id="clicker-upgrade-2x" class="CUBox"><img src="src/cursor.png" class="clickup"></div>
@@ -34,6 +37,7 @@
                 <div class="buyitem" id="wind"><img src="src/wind.png" class="storeimg"/><h1 class="storetext">Turbine</h1><h1 class="storecost" id="windprice">12000 Units</h1><h1 id="wind_count"></h1></div>
                 <div class="buyitem" id="sun"><img src="src/sun.png" class="storeimg"/><h1 class="storetext">Solar Panel</h1><h1 class="storecost" id="sunprice">130000 Units</h1><h1 id="sun_count"></h1></div>
                 <div class="buyitem" id="bio"><img src="src/bio.png" class="storeimg"/><h1 class="storetext">Biofuel</h1><h1 class="storecost" id="bioprice">1400000 Units</h1><h1 id="bio_count"></h1></div>
+                <div class="buyitem" id="nuke"><img src="src/nuke.png" class="storeimg"><h1 class="storetext">Nuclear</h1><h1 class="storecost" id="nukeprice">20000000</h1><h1 id="nuke_count"></h1></div>
             </section>
         </section>
         <script type="text/javascript">
@@ -95,11 +99,17 @@
             var bioMult = 1;
             var bioPrice = 1400000;
             var clicksPSBio = (bios * 1400) * bioMult;
+
+            //nuke
+            var nukes = 0;
+            var nukeMult = 1;
+            var nukePrice = 20000000;
+            var clicksPSNuke = (nukes * 7800) * nukeMult;
             
             //general
             var name = "My Laboratory";
             var clicks = 0;
-            var clicksPS = (clicksPSCursor + clicksPSDam + clicksPSVolcan + clicksPSWind + clicksPSSun + clicksPSBio);
+            var clicksPS = (clicksPSCursor + clicksPSDam + clicksPSVolcan + clicksPSWind + clicksPSSun + clicksPSBio + clicksPSNuke);
             document.getElementById("amountPS").innerHTML = clicksPS.toString() + " Units Per Second";
 
             //elements
@@ -111,6 +121,7 @@
             var eleWindPrice = document.getElementById("windprice");
             var eleSunPrice = document.getElementById("sunprice");
             var eleBioPrice = document.getElementById("bioprice");
+            var eleNukePrice = document.getElementById("nukeprice");
 
             //begining function
             window.onload = function() {
@@ -205,6 +216,18 @@
                 } else {
                     bioMult = 1;
                 }
+                if (localStorage.nukes != undefined) {
+                    nukes = localStorage.nukes;
+                    document.getElementById("nuke_count").innerHTML = nukes;
+                } else {
+                    nukes = 0;
+                    document.getElementById("nuke_count").innerHTML = nukes;
+                }
+                if (localStorage.NukeMult != undefined) {
+                    nukeMult = localStorage.NukeMult;
+                } else {
+                    nukeMult = 1;
+                }
                 
                 //prices;
                 cursorPrice = price(15, cursors);
@@ -219,6 +242,8 @@
                 pricedater(eleSunPrice, sunPrice);
                 bioPrice = price(1400000, bios);
                 pricedater(eleBioPrice, bioPrice);
+                nukeMult = price(20000000, nukes);
+                pricedater(eleNukePrice, nukePrice);
 
                 //per seconds
                 clicksPSCursor = cursors * cursorMult;
@@ -227,7 +252,8 @@
                 clicksPSWind = (winds * 42) * windMult;
                 clicksPSSun = (suns * 260) * sunMult;
                 clicksPSBio = (bios * 1400) * bioMult;
-                clicksPS = ((clicksPSCursor + clicksPSDam) + (clicksPSVolcan + clicksPSWind) + clicksPSSun + clicksPSBio);
+                clicksPSNuke = (nukes * 7800) * nukeMult;
+                clicksPS = ((clicksPSCursor + clicksPSDam) + (clicksPSVolcan + clicksPSWind) + clicksPSSun + clicksPSBio + clicksPSNuke);
                 document.getElementById("amountPS").innerHTML = clicksPS + " Units Per Second";
                 
             };
@@ -257,10 +283,14 @@
                     sunMult = 1;
                     bios = 0
                     bioMult = 1;
+                    nukes = 0;
+                    nukeMult = 1;
 
                     //prices
+                    nukePrice = price(20000000, nukes);
+                    eleNukePrice.innerHTML = "20.00M Units";
                     bioPrice = price(1400000, bios);
-                    eleBioPrice.innerHTML = "1.40M Units"
+                    eleBioPrice.innerHTML = "1.40M Units";
                     sunPrice = price(130000, suns);
                     eleSunPrice.innerHTML = "130000 Units";
                     windPrice = price(12000, winds);
@@ -279,6 +309,7 @@
                     clicksPSWind = (winds * 42) * windMult;
                     clicksPSSun = (suns * 260) * sunMult ;
                     clicksPSBio = (bios * 1400) * bioMult;
+                    clicksPSNuke = (nukes * 7800) * nukeMult;
 
                     //update
                     updatePS();
@@ -288,7 +319,8 @@
                     document.getElementById("geo_count").innerHTML = volcan;
                     document.getElementById("wind_count").innerHTML = winds;
                     document.getElementById("sun_count").innerHTML = suns;
-                    document.getElementById("bio_count").innerHTL = bios;
+                    document.getElementById("bio_count").innerHTML = bios;
+                    document.getElementById("nuke_count").innerHTML = nukes;
 
                     resornot = null;
                 }
@@ -310,6 +342,8 @@
                 localStorage.SunMult = sunMult;
                 localStorage.bios = bios;
                 localStorage.BioMult = bioMult;
+                localStorage.nukes = nukes;
+                localStorage.NukeMult = nukeMult;
             };
 
             //naming function
@@ -384,7 +418,7 @@
                
             }
             function updatePS() {
-                clicksPS = (clicksPSCursor + clicksPSDam + clicksPSVolcan + clicksPSWind + clicksPSSun + clicksPSBio);
+                clicksPS = (clicksPSCursor + clicksPSDam + clicksPSVolcan + clicksPSWind + clicksPSSun + clicksPSBio + clicksPSNuke);
                 amountPS.innerHTML = clicksPS + " Units Per Second";
             }
 
@@ -484,6 +518,20 @@
                     bioPrice = price(1400000, bios);
                     pricedater(eleBioPrice, bioPrice);
                     clicksPSBio = (bios * 1400) * bioMult;
+                    updatePS();
+                }
+            };
+
+            //buy nuke
+            document.getElementById("nuke").onclick = function() {
+                if (clicks >= nukePrice) {
+                    clicks -= nukePrice;
+                    updateCount();
+                    nuke++;
+                    document.getElementById("nuke_count").innerHTML = nukes;
+                    nukePrice = price(20000000, nukes);
+                    pricedater(eleNukePrice, nukePrice);
+                    clicksPSNuke = (nukes * 7800) * nukeMult;
                     updatePS();
                 }
             };
