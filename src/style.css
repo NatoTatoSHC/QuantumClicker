@@ -176,7 +176,7 @@ h1#bio_count {
 div.vispanel {
     width:100%;
     height: 20%;
-    background: blue;
+    background-color: blue;
 }
 h1#nuke_count {
     position: relative;
