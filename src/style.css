@@ -34,11 +34,13 @@ section#right-panel {
     right: 0px;
     position: absolute;
     overflow-y: scroll;
-    
 }
 section#store {
-    overflow-y:visible;
-    overflow-x: hidden;
+    overflow-y: auto;
+    padding: 5px;
+    
+    
+    
 }
 section#upgrades {
     background-color: blue;
@@ -101,7 +103,7 @@ h1.storetext {
 }
 h1#cursor_count {
     position: relative;
-    top: -135px;
+    top: -225%;
     left: 85%;
 }
 div.CUBox {
@@ -110,7 +112,7 @@ div.CUBox {
 h1#hydro_count {
     position:relative;
     left: 85%;
-    top: -135px;
+    top: -225%;
 }
 h1#hydrotext {
     position: relative;
@@ -118,18 +120,18 @@ h1#hydrotext {
     left:40%
 }
 h1.storecost {
-    position: relative;
-    top: -80px;
-    left:40%;
+    position:relative;
+    top:-60px;
+    left:100px;
 }
 h1#hname {
     color:black;
     
 }
 div#name {
-    position:relative;
+    position:absolute;
     left:25%;
-    top:-67%;
+    top:10px;
     width:50%;
     height:fit-content;
     background-color:rgb(105, 229, 255);
@@ -139,7 +141,7 @@ div#sep {
     background-color: white;
     height:1%;
     width: 100%;
-    top:-67%;
+    top:0;
     cursor: crosshair;
 }
 p#version {
@@ -154,22 +156,22 @@ p#info {
 }
 h1#geo_count {
     position: relative;
-    top: -135px;
+    top: -230%;
     left: 85%;
 }
 h1#wind_count {
     position: relative;
-    top: -135px;
+    top: -230%;
     left: 85%;
 }
 h1#sun_count {
     position: relative;
-    top: -135px;
+    top: -230%;
     left: 85%;
 }
 h1#bio_count {
     position: relative;
-    top: -135px;
+    top: -230%;
     left: 85%
 }
 div.vispanel {
@@ -179,6 +181,6 @@ div.vispanel {
 }
 h1#nuke_count {
     position: relative;
-    top: -135px;
+    top:-230%;
     left: 85%;
 }
