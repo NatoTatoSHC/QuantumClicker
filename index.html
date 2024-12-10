@@ -6,16 +6,18 @@
         <link rel="icon" type="image/x-icon" href="src/quantum.ico">
     </head>
     <body>
-        abcdefghijklmnopqrstuvwxyz
+        
         <section id="left-panel">
-            <h1 id="amount"></h1>
-            <h1 id="amountPS">0 Units Per Second</h1>
-            <img id="press" src="src/quantum.png"/>
-            <div id="reset">&#8634;</div>
             <div id="name">
                 <h1 id="hname">NOT LOADED</h1>
             </div>
             <div id="sep"></div>
+            <h1 id="amount"></h1>
+            <h1 id="amountPS">0 Units Per Second</h1>
+            <img id="press" src="src/quantum.png"/>
+            <div id="reset">&#8634;</div>
+            
+            
             <p id="version">Unfinished Version</p>
             <p id="info">Not For Moblie Use - Stay In Classic Window</p>
         </section>
@@ -237,7 +239,7 @@
                 geoprice = price(1100, volcan);
                 eleVolcanPrice.innerHTML = geoprice + " Units";
                 windPrice = price(12000, winds);
-                eleWindPrice.innerHTML = windPrice + " Units"
+                pricedater(eleWindPrice, windPrice);
                 sunPrice = price(130000, suns);
                 pricedater(eleSunPrice, sunPrice);
                 bioPrice = price(1400000, bios);
