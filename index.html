@@ -14,7 +14,8 @@
             <div id="sep"></div>
             <h1 id="amount"></h1>
             <h1 id="amountPS">0 Units Per Second</h1>
-            <img id="press" src="src/quantum.png"/>
+            <img id="press" src="src/quantum.png"></img>
+            
             <div id="reset">&#8634;</div>
             
             
@@ -22,7 +23,10 @@
             <p id="info">Not For Moblie Use - Stay In Classic Window</p>
         </section>
         <section id="mid-zone">
-            <div class="vispanel" id="dams">Visual Panels Are Not Ready</div>
+            <div class="vispanel" id="dams">
+                <div id="dam1" style="height: 48%; width:auto; position: relative; top: 1%; left:1%;"><img src="src/dam.png" style="height:100%;"></div>
+                <div id="dam2" style="height: 48%; width: auto; position: relative; bottom: 1%; left:12%;"><img src="src/dam.png" style="height: 100%; "></div>
+            </div>
         </section>
         <section id="right-panel">
             <section id="upgrades">
@@ -33,16 +37,17 @@
                 <div id="clicker-upgrade-32x" class="CUBox"><img src="src/cursor.png" class="clickup"></div>
             </section>
             <section id="store">
-                <div class="buyitem" id="clicker"><img src="src/cursor.png" class="storeimg"/><h1 class="storetext">Cursor</h1><h1 class="storecost" id="cursorprice">15 Units</h1><h1 id="cursor_count"></h1></div>
-                <div class="buyitem" id="hydro"><img src="src/dam.png" class="storeimg"/><h1 class="storetext">Hydropower</h1><h1 class="storecost" id="hydroprice">100 Units</h1><h1 id="hydro_count"></h1></div>
-                <div class="buyitem" id="geo"><img src="src/volcan.png" class="storeimg"/><h1 class="storetext">Geothermal</h1><h1 class="storecost" id="geoprice">1100 Units</h1><h1 id="geo_count"></h1></div>
-                <div class="buyitem" id="wind"><img src="src/wind.png" class="storeimg"/><h1 class="storetext">Turbine</h1><h1 class="storecost" id="windprice">12000 Units</h1><h1 id="wind_count"></h1></div>
-                <div class="buyitem" id="sun"><img src="src/sun.png" class="storeimg"/><h1 class="storetext">Solar Panel</h1><h1 class="storecost" id="sunprice">130000 Units</h1><h1 id="sun_count"></h1></div>
-                <div class="buyitem" id="bio"><img src="src/bio.png" class="storeimg"/><h1 class="storetext">Biofuel</h1><h1 class="storecost" id="bioprice">1400000 Units</h1><h1 id="bio_count"></h1></div>
-                <div class="buyitem" id="nuke"><img src="src/nuke.png" class="storeimg"><h1 class="storetext">Nuclear</h1><h1 class="storecost" id="nukeprice">20000000</h1><h1 id="nuke_count"></h1></div>
+                <abbr title="1 UPS"><div class="buyitem" id="clicker"><img src="src/cursor.png" class="storeimg"/><h1 class="storetext">Cursor</h1><div class="storecost"><h1 class="storecost" id="cursorprice">15 Units</h1></div><h1 class="count" id="cursor_count"></h1></div></abbr>
+                <div class="buyitem" id="hydro"><img src="src/dam.png" class="storeimg"/><h1 class="storetext">Hydropower</h1><div class="storecost"><h1 class="storecost" id="hydroprice">100 Units</h1></div><h1 class="count" id="hydro_count"></h1></div>
+                <div class="buyitem" id="geo"><img src="src/volcan.png" class="storeimg"/><h1 class="storetext">Geothermal</h1><div class="storecost"><h1 class="storecost" id="geoprice">1100 Units</h1></div><h1 class="count" id="geo_count"></h1></div>
+                <div class="buyitem" id="wind"><img src="src/wind.png" class="storeimg"/><h1 class="storetext">Turbine</h1><div class="storecost"><h1 class="storecost" id="windprice">12000 Units</h1></div><h1 class="count" id="wind_count"></h1></div>
+                <div class="buyitem" id="sun"><img src="src/sun.png" class="storeimg"/><h1 class="storetext">Solar Panel</h1><div class="storecost"><h1 class="storecost" id="sunprice">130000 Units</h1></div><h1 class="count" id="sun_count"></h1></div>
+                <div class="buyitem" id="bio"><img src="src/bio.png" class="storeimg"/><h1 class="storetext">Biofuel</h1><div class="storecost"><h1 class="storecost" id="bioprice">1400000 Units</h1></div><h1 class="count" id="bio_count"></h1></div>
+                <div class="buyitem" id="nuke"><img src="src/nuke.png" class="storeimg"><h1 class="storetext">Nuclear</h1><div class="storecost"><h1 class="storecost" id="nukeprice">20000000</h1></div><h1 class="count" id="nuke_count"></h1></h1></div>
             </section>
         </section>
         <script type="text/javascript">
+            //document.createElement("h1", id="537")
             /*sessionStorage.cards = [];
             if(localStorage.paid != undefined) {
                 console.log("all good");
