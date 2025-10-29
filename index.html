@@ -1,548 +1,235 @@
-<!--The secret code that you name yourself is NLAE-->
-<html>
-    <head>
-        <title>Quantum Clicker</title>
-        <link rel="stylesheet" href="src/style.css">
-        <link rel="icon" type="image/x-icon" href="src/quantum.ico">
-    </head>
-    <body>
-        
-        <section id="left-panel">
-            <div id="name">
-                <h1 id="hname">NOT LOADED</h1>
-            </div>
-            <div id="sep"></div>
-            <h1 id="amount"></h1>
-            <h1 id="amountPS">0 Units Per Second</h1>
-            <img id="press" src="src/quantum.png"></img>
-            
-            <div id="reset">&#8634;</div>
-            
-            
-            <p id="version">Unfinished Version</p>
-            <p id="info">Not For Moblie Use - Stay In Classic Window</p>
-        </section>
-        <section id="mid-zone">
-            <div class="vispanel" id="dams">
-                <div id="dam1" style="height: 48%; width:auto; position: relative; top: 1%; left:1%;"><img src="src/dam.png" style="height:100%;"></div>
-                <div id="dam2" style="height: 48%; width: auto; position: relative; bottom: 1%; left:12%;"><img src="src/dam.png" style="height: 100%; "></div>
-            </div>
-        </section>
-        <section id="right-panel">
-            <section id="upgrades">
-                <div id="clicker-upgrade-2x" class="CUBox"><img src="src/cursor.png" class="clickup"></div>
-                <div id="clicker-upgrade-4x" class="CUBox"><img src="src/cursor.png" class="clickup"></div>
-                <div id="clicker-upgrade-8x" class="CUBox"><img src="src/cursor.png" class="clickup"></div>
-                <div id="clicker-upgrade-16x" class="CUBox"><img src="src/cursor.png" class="clickup"></div>
-                <div id="clicker-upgrade-32x" class="CUBox"><img src="src/cursor.png" class="clickup"></div>
-            </section>
-            <section id="store">
-                <abbr title="1 UPS"><div class="buyitem" id="clicker"><img src="src/cursor.png" class="storeimg"/><h1 class="storetext">Cursor</h1><div class="storecost"><h1 class="storecost" id="cursorprice">15 Units</h1></div><h1 class="count" id="cursor_count"></h1></div></abbr>
-                <div class="buyitem" id="hydro"><img src="src/dam.png" class="storeimg"/><h1 class="storetext">Hydropower</h1><div class="storecost"><h1 class="storecost" id="hydroprice">100 Units</h1></div><h1 class="count" id="hydro_count"></h1></div>
-                <div class="buyitem" id="geo"><img src="src/volcan.png" class="storeimg"/><h1 class="storetext">Geothermal</h1><div class="storecost"><h1 class="storecost" id="geoprice">1100 Units</h1></div><h1 class="count" id="geo_count"></h1></div>
-                <div class="buyitem" id="wind"><img src="src/wind.png" class="storeimg"/><h1 class="storetext">Turbine</h1><div class="storecost"><h1 class="storecost" id="windprice">12000 Units</h1></div><h1 class="count" id="wind_count"></h1></div>
-                <div class="buyitem" id="sun"><img src="src/sun.png" class="storeimg"/><h1 class="storetext">Solar Panel</h1><div class="storecost"><h1 class="storecost" id="sunprice">130000 Units</h1></div><h1 class="count" id="sun_count"></h1></div>
-                <div class="buyitem" id="bio"><img src="src/bio.png" class="storeimg"/><h1 class="storetext">Biofuel</h1><div class="storecost"><h1 class="storecost" id="bioprice">1400000 Units</h1></div><h1 class="count" id="bio_count"></h1></div>
-                <div class="buyitem" id="nuke"><img src="src/nuke.png" class="storeimg"><h1 class="storetext">Nuclear</h1><div class="storecost"><h1 class="storecost" id="nukeprice">20000000</h1></div><h1 class="count" id="nuke_count"></h1></h1></div>
-            </section>
-        </section>
-        <script type="text/javascript">
-            //document.createElement("h1", id="537")
-            /*sessionStorage.cards = [];
-            if(localStorage.paid != undefined) {
-                console.log("all good");
-            } else {
-                localStorage.paid = false;
-            }
-            if (localStorage.paid == true) {
-                console.log("thank you");
-            } else {
-                var pay = confirm("Are You Willing To Pay $30.00 To Play This Game?");
-                if (pay == false) {
-                    Document.close();
-                } else {
-                    var card = promt("Please Enter Card Number:")
-                    if (card == null || undefined || NaN) {
-                        close();
-                    } else {
-                        alert("Saving Number To Storage");
-                        sessionStorage.cards.push(card);
-                    }
-                }
-            }*/
-            //vars
-            //cursors
-            var cursors = 0;
-            var cursorMult = 1;
-            var cursorPrice = 15;
-            var clicksPSCursor = cursors * cursorMult;
-            //alert(sessionStorage.cards);
-            //dams
-            var dams = 0;
-            var damMult = 1;
-            var damPrice = 100;
-            var clicksPSDam = (dams * 5) * damMult;
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Quantum Clicker</title>
+  <style>
+    body { font-family: Arial, sans-serif; background:#f0f8ff; margin:0; padding:12px; display:flex; gap:12px; }
+    section { background:#fff; border-radius:8px; padding:12px; box-shadow:0 2px 6px rgba(0,0,0,.08); }
+    #left-panel { width:260px; }
+    #mid-zone { flex:1; display:flex; align-items:center; justify-content:center; min-height:300px; background:#e0f0ff; border-radius:8px; }
+    #right-panel { width:320px; }
+    #press { width:160px; cursor:pointer; display:block; margin:8px auto; }
+    .buyitem { display:flex; align-items:center; gap:8px; border:1px solid #eee; padding:8px; margin:6px 0; cursor:pointer; }
+    .storeimg{ width:48px; height:48px; object-fit:contain }
+    .storetext{ margin:0; font-size:16px }
+    .storecost{ margin-left:auto; font-weight:600 }
+    .count{ font-weight:bold; }
+    #reset { cursor:pointer; user-select:none; padding:6px; display:inline-block; border-radius:6px; background:#eee; text-align:center; }
+    #name { cursor:pointer; }
+    #sep{cursor:pointer; display:inline-block; margin-left:6px;}
+  </style>
+</head>
+<body>
+  <section id="left-panel">
+    <div id="name"><h1 id="hname">NOT LOADED</h1></div>
+    <!---<div id="sep" title="Dev console">⚙️</div>--->
+    <h1 id="amount">0 Units of Energy</h1>
+    <h2 id="amountPS">0 Units Per Second</h2>
+    <img id="press" src="src/quantum.png" alt="press">
+    <div id="reset" title="Reset progress">&#8634; Reset</div>
+    <p id="version">Unfinished Version</p>
+    <p id="info">Works on mobile & desktop</p>
+  </section>
 
-            //geo
-            var volcan = 0;
-            var volcanMult = 1;
-            var geoprice =  1100;
-            var clicksPSVolcan = (volcan * 8) * volcanMult;
+  <section id="mid-zone">
+    <div id="middle-placeholder">Middle panel visuals go here</div>
+  </section>
 
-            //wind
-            var winds = 0;
-            var windMult = 1;
-            var windPrice = 12000;
-            var clicksPSWind = (winds * 47) * windMult;
+  <section id="right-panel">
+    <section id="upgrades">Upgrades go here</section>
+    <section id="store">
+      <div class="buyitem" id="clicker"><img src="src/cursor.png" class="storeimg" alt=""><h1 class="storetext">Cursor</h1><div class="storecost" id="cursorprice">15 Units</div><div class="count" id="cursor_count">0</div></div>
+      <div class="buyitem" id="hydro"><img src="src/dam.png" class="storeimg" alt=""><h1 class="storetext">Hydropower</h1><div class="storecost" id="hydroprice">100 Units</div><div class="count" id="hydro_count">0</div></div>
+      <div class="buyitem" id="geo"><img src="src/volcan.png" class="storeimg" alt=""><h1 class="storetext">Geothermal</h1><div class="storecost" id="geoprice">1100 Units</div><div class="count" id="geo_count">0</div></div>
+      <div class="buyitem" id="wind"><img src="src/wind.png" class="storeimg" alt=""><h1 class="storetext">Turbine</h1><div class="storecost" id="windprice">12000 Units</div><div class="count" id="wind_count">0</div></div>
+      <div class="buyitem" id="sun"><img src="src/sun.png" class="storeimg" alt=""><h1 class="storetext">Solar Panel</h1><div class="storecost" id="sunprice">130000 Units</div><div class="count" id="sun_count">0</div></div>
+      <div class="buyitem" id="bio"><img src="src/bio.png" class="storeimg" alt=""><h1 class="storetext">Biofuel</h1><div class="storecost" id="bioprice">1400000 Units</div><div class="count" id="bio_count">0</div></div>
+      <div class="buyitem" id="nuke"><img src="src/nuke.png" class="storeimg" alt=""><h1 class="storetext">Nuclear</h1><div class="storecost" id="nukeprice">20.00M Units</div><div class="count" id="nuke_count">0</div></div>
+    </section>
+  </section>
 
-            //sun
-            var suns = 0;
-            var sunMult = 1;
-            var sunPrice = 130000;
-            var clicksPSSun = (suns * 260) * sunMult;
-            
-            //bio
-            var bios = 0;
-            var bioMult = 1;
-            var bioPrice = 1400000;
-            var clicksPSBio = (bios * 1400) * bioMult;
+<script>
+/* -------------------------
+   Game state
+------------------------- */
+let clicks = 0;
 
-            //nuke
-            var nukes = 0;
-            var nukeMult = 1;
-            var nukePrice = 20000000;
-            var clicksPSNuke = (nukes * 7800) * nukeMult;
-            
-            //general
-            var name = "My Laboratory";
-            var clicks = 0;
-            var clicksPS = (clicksPSCursor + clicksPSDam + clicksPSVolcan + clicksPSWind + clicksPSSun + clicksPSBio + clicksPSNuke);
-            document.getElementById("amountPS").innerHTML = clicksPS.toString() + " Units Per Second";
+let cursors = 0, cursorMult = 1, cursorBasePrice = 15;
+let dams = 0, damMult = 1, damBasePrice = 100;
+let volcan = 0, volcanMult = 1, volcanBasePrice = 1100;
+let winds = 0, windMult = 1, windBasePrice = 12000;
+let suns = 0, sunMult = 1, sunBasePrice = 130000;
+let bios = 0, bioMult = 1, bioBasePrice = 1400000;
+let nukes = 0, nukeMult = 1, nukeBasePrice = 20000000;
 
-            //elements
-            var amount = document.getElementById("amount");
-            var amountPS = document.getElementById("amountPS");
-            var eleCursorPrice = document.getElementById("cursorprice");
-            var eleDamPrice = document.getElementById("hydroprice");
-            var eleVolcanPrice = document.getElementById("geoprice");
-            var eleWindPrice = document.getElementById("windprice");
-            var eleSunPrice = document.getElementById("sunprice");
-            var eleBioPrice = document.getElementById("bioprice");
-            var eleNukePrice = document.getElementById("nukeprice");
+let clicksPS = 0;
 
-            //begining function
-            window.onload = function() {
-                if (localStorage.num != undefined) {
-                    clicks = localStorage.num;
-                    updateCount()
-                } else {
-                    clicks = 0;
-                    updateCount()
-                }
+/* DOM elements */
+const amountEl = document.getElementById('amount');
+const amountPSEl = document.getElementById('amountPS');
 
-                if (localStorage.CurMult != undefined) {
-                    cursorMult = localStorage.CurMult;
-                    
-                } else {
-                    cursorMult = 1;
-                }
+const cursorCountEl = document.getElementById('cursor_count');
+const damCountEl = document.getElementById('hydro_count');
+const geoCountEl = document.getElementById('geo_count');
+const windCountEl = document.getElementById('wind_count');
+const sunCountEl = document.getElementById('sun_count');
+const bioCountEl = document.getElementById('bio_count');
+const nukeCountEl = document.getElementById('nuke_count');
 
-                if (localStorage.DamMult != undefined) {
-                    damMult = localStorage.DamMult;
-                } else {
-                    damMult = 1;
-                }
+const eleCursorPrice = document.getElementById('cursorprice');
+const eleDamPrice = document.getElementById('hydroprice');
+const eleVolcanPrice = document.getElementById('geoprice');
+const eleWindPrice = document.getElementById('windprice');
+const eleSunPrice = document.getElementById('sunprice');
+const eleBioPrice = document.getElementById('bioprice');
+const eleNukePrice = document.getElementById('nukeprice');
 
-                if (localStorage.cursors != undefined) {
-                    cursors = localStorage.cursors;
-                    document.getElementById("cursor_count").innerHTML = cursors;
-                } else {
-                    cursors = 0;
-                    document.getElementById("cursor_count").innerHTML = cursors;
-                }
-                if (localStorage.dams != undefined) {
-                    dams = localStorage.dams;
-                    document.getElementById("hydro_count").innerHTML = dams;
-                } else {
-                    dams = 0;
-                    document.getElementById("hydro_count").innerHTML = dams;
-                }
-                if (localStorage.name != undefined) {
-                    name = localStorage.name;
-                    document.getElementById("hname").innerHTML = name;
-                } else {
-                    name= "My Laboratory";
-                    document.getElementById("hname").innerHTML = name;
-                }
-                if (localStorage.volcans != undefined) {
-                    volcan = localStorage.volcans;
-                    document.getElementById("geo_count").innerHTML = volcan;
-                } else {
-                    volcan = 0;
-                    document.getElementById("geo_count").innerHTML = volcan;
-                }
-                if (localStorage.GeoMult != undefined) {
-                    volcanMult = localStorage.GeoMult;
-                } else {
-                    volcanMult = 1;
-                }
-                
-                if (localStorage.winds != undefined) {
-                    winds = localStorage.winds;
-                    document.getElementById("wind_count").innerHTML = winds;
-                } else {
-                    winds = 0;
-                    document.getElementById("wind_count").innerHTML = winds;
-                }
-                if (localStorage.WindMult != undefined) {
-                    windMult = localStorage.WindMult;
-                } else {
-                    windMult = 1;
-                }
-                if (localStorage.suns != undefined) {
-                    suns = localStorage.suns;
-                    document.getElementById("sun_count").innerHTML = suns;
-                } else {
-                    suns = 0;
-                    document.getElementById("sun_count").innerHTML = suns;
-                }
-                if (localStorage.SM != undefined) {
-                    sunMult = localStorage.SM;
-                } else {
-                    sunMult = 1;
-                }
-                if (localStorage.bios != undefined) {
-                    bios = localStorage.bios;
-                    document.getElementById("bio_count").innerHTML = bios;
-                } else {
-                    bios = 0;
-                    document.getElementById("bio_count").innerHTML = bios;
-                }
-                if (localStorage.BioMult != undefined) {
-                    bioMult = localStorage.BioMult;
-                } else {
-                    bioMult = 1;
-                }
-                if (localStorage.nukes != undefined) {
-                    nukes = localStorage.nukes;
-                    document.getElementById("nuke_count").innerHTML = nukes;
-                } else {
-                    nukes = 0;
-                    document.getElementById("nuke_count").innerHTML = nukes;
-                }
-                if (localStorage.NukeMult != undefined) {
-                    nukeMult = localStorage.NukeMult;
-                } else {
-                    nukeMult = 1;
-                }
-                
-                //prices;
-                cursorPrice = price(15, cursors);
-                eleCursorPrice.innerHTML = cursorPrice + " Units";
-                damPrice = price(100, dams);
-                eleDamPrice.innerHTML = damPrice + " Units";
-                geoprice = price(1100, volcan);
-                eleVolcanPrice.innerHTML = geoprice + " Units";
-                windPrice = price(12000, winds);
-                pricedater(eleWindPrice, windPrice);
-                sunPrice = price(130000, suns);
-                pricedater(eleSunPrice, sunPrice);
-                bioPrice = price(1400000, bios);
-                pricedater(eleBioPrice, bioPrice);
-                nukeMult = price(20000000, nukes);
-                pricedater(eleNukePrice, nukePrice);
+const nameEl = document.getElementById('hname');
 
-                //per seconds
-                clicksPSCursor = cursors * cursorMult;
-                clicksPSDam = (dams * 5) * damMult;
-                clicksPSVolcan = (volcan * 8) * volcanMult;
-                clicksPSWind = (winds * 42) * windMult;
-                clicksPSSun = (suns * 260) * sunMult;
-                clicksPSBio = (bios * 1400) * bioMult;
-                clicksPSNuke = (nukes * 7800) * nukeMult;
-                clicksPS = ((clicksPSCursor + clicksPSDam) + (clicksPSVolcan + clicksPSWind) + clicksPSSun + clicksPSBio + clicksPSNuke);
-                document.getElementById("amountPS").innerHTML = clicksPS + " Units Per Second";
-                
-            };
+/* -------------------------
+   Utility functions
+------------------------- */
+function price(base, amountOwned) {
+  return Math.ceil(base * Math.pow(1.15, amountOwned));
+}
 
-            //click function
-            document.getElementById("press").onclick = function() {
-                clicks++;
-                updateCount();
-                
-            };
+function formatBig(n) {
+  if (n >= 1e9) return (n / 1e9).toFixed(2) + "B";
+  if (n >= 1e6) return (n / 1e6).toFixed(2) + "M";
+  if (n >= 1e3) return (n / 1e3).toFixed(2) + "k";
+  return n.toString();
+}
 
-            //reset function
-            document.getElementById("reset").onclick = function() {
-                var resornot = confirm("Are you sure you would like to reset?");
-                if (resornot == true) {
-                    //vars
-                    clicks = 0;
-                    cursorMult = 1;
-                    damMult = 1;
-                    cursors = 0;
-                    dams = 0;
-                    volcan = 0;
-                    winds = 0;
-                    windMult = 1;
-                    volcanMult = 1;
-                    suns = 0;
-                    sunMult = 1;
-                    bios = 0
-                    bioMult = 1;
-                    nukes = 0;
-                    nukeMult = 1;
+function updateUIAll() {
+  amountEl.textContent = formatBig(clicks) + " Units of Energy";
+  cursorCountEl.textContent = cursors;
+  damCountEl.textContent = dams;
+  geoCountEl.textContent = volcan;
+  windCountEl.textContent = winds;
+  sunCountEl.textContent = suns;
+  bioCountEl.textContent = bios;
+  nukeCountEl.textContent = nukes;
 
-                    //prices
-                    nukePrice = price(20000000, nukes);
-                    eleNukePrice.innerHTML = "20.00M Units";
-                    bioPrice = price(1400000, bios);
-                    eleBioPrice.innerHTML = "1.40M Units";
-                    sunPrice = price(130000, suns);
-                    eleSunPrice.innerHTML = "130000 Units";
-                    windPrice = price(12000, winds);
-                    geoprice = price(1100, volcan);
-                    eleWindPrice.innerHTML = "12000 Units";
-                    eleVolcanPrice.innerHTML = "1100 Units";
-                    cursorPrice = price(15, cursors);
-                    eleCursorPrice.innerHTML = "15 Units";
-                    damPrice = price(100, dams);
-                    eleDamPrice.innerHTML = "100 Units";
+  eleCursorPrice.textContent = formatBig(price(cursorBasePrice, cursors)) + " Units";
+  eleDamPrice.textContent = formatBig(price(damBasePrice, dams)) + " Units";
+  eleVolcanPrice.textContent = formatBig(price(volcanBasePrice, volcan)) + " Units";
+  eleWindPrice.textContent = formatBig(price(windBasePrice, winds)) + " Units";
+  eleSunPrice.textContent = formatBig(price(sunBasePrice, suns)) + " Units";
+  eleBioPrice.textContent = formatBig(price(bioBasePrice, bios)) + " Units";
+  eleNukePrice.textContent = formatBig(price(nukeBasePrice, nukes)) + " Units";
 
-                    //CPS
-                    clicksPSCursor = cursors * cursorMult;
-                    clicksPSDam = (dams * 5) * damMult;
-                    clicksPSVolcan = (volcan * 8) * volcanMult;
-                    clicksPSWind = (winds * 42) * windMult;
-                    clicksPSSun = (suns * 260) * sunMult ;
-                    clicksPSBio = (bios * 1400) * bioMult;
-                    clicksPSNuke = (nukes * 7800) * nukeMult;
+  // Recalculate CPS
+  clicksPS = cursors * cursorMult +
+             dams * 5 * damMult +
+             volcan * 8 * volcanMult +
+             winds * 47 * windMult +
+             suns * 260 * sunMult +
+             bios * 1400 * bioMult +
+             nukes * 7800 * nukeMult;
 
-                    //update
-                    updatePS();
-                    updateCount();
-                    document.getElementById("cursor_count").innerHTML = cursors;
-                    document.getElementById("hydro_count").innerHTML = dams;
-                    document.getElementById("geo_count").innerHTML = volcan;
-                    document.getElementById("wind_count").innerHTML = winds;
-                    document.getElementById("sun_count").innerHTML = suns;
-                    document.getElementById("bio_count").innerHTML = bios;
-                    document.getElementById("nuke_count").innerHTML = nukes;
+  amountPSEl.textContent = formatBig(clicksPS) + " Units Per Second";
+}
 
-                    resornot = null;
-                }
-            };
-            
-            //closing function
-            window.onunload = function() {
-                localStorage.num = clicks;
-                localStorage.CurMult = cursorMult;
-                localStorage.DamMult = damMult;
-                localStorage.cursors = cursors;
-                localStorage.dams = dams;
-                localStorage.name = name;
-                localStorage.volcans = volcan;
-                localStorage.GeoMult = volcanMult;
-                localStorage.WindMult = windMult;
-                localStorage.winds = winds;
-                localStorage.suns = suns;
-                localStorage.SunMult = sunMult;
-                localStorage.bios = bios;
-                localStorage.BioMult = bioMult;
-                localStorage.nukes = nukes;
-                localStorage.NukeMult = nukeMult;
-            };
+/* -------------------------
+   Save / Load
+------------------------- */
+function saveGame() {
+  const state = {clicks,cursors,cursorMult,dams,damMult,volcan,volcanMult,winds,windMult,suns,sunMult,bios,bioMult,nukes,nukeMult,name:nameEl.textContent};
+  try { localStorage.setItem('quantum_clicker_v1', JSON.stringify(state)); } catch(e){ console.warn('Save failed',e);}
+}
 
-            //naming function
-            document.getElementById("name").onclick = function() {
-                var newname = "";
-                while (newname == null || newname == "") {
-                    newname = prompt("New Name For Laboratory:") + "'s Laboratory";
-                }
-                if (newname.length <= 28) {
-                    name = newname;
-                    document.getElementById("hname").innerHTML = name;
-                } else {
-                    alert("Name Too Long, Max Amount: 15 Characters");
-                }
-            };
+function loadGame() {
+  try {
+    const raw = localStorage.getItem('quantum_clicker_v1');
+    if (!raw) return;
+    const s = JSON.parse(raw);
+    clicks = Number(s.clicks||0);
+    cursors = Number(s.cursors||0);
+    cursorMult = Number(s.cursorMult||1);
+    dams = Number(s.dams||0);
+    damMult = Number(s.damMult||1);
+    volcan = Number(s.volcan||0);
+    volcanMult = Number(s.volcanMult||1);
+    winds = Number(s.winds||0);
+    windMult = Number(s.windMult||1);
+    suns = Number(s.suns||0);
+    sunMult = Number(s.sunMult||1);
+    bios = Number(s.bios||0);
+    bioMult = Number(s.bioMult||1);
+    nukes = Number(s.nukes||0);
+    nukeMult = Number(s.nukeMult||1);
+    if (s.name) nameEl.textContent = s.name;
+  } catch(e){ console.warn('Load failed',e); }
+}
 
-            const timeout = setTimeout(tick, 500);
+/* -------------------------
+   Initialization
+------------------------- */
+loadGame();
+updateUIAll();
 
-            //dev tools
-            document.getElementById("sep").onclick = function() {
-                if (name == "NLAE's Laboratory") {
-                    var cmd = prompt("Yes Master:");
-                    if (cmd == "plus units") {
-                        var cmdPlus = prompt("How Many:");
-                        for (let i = 0; i < Number(cmdPlus); i++) {
-                            clicks++;
-                            
-                        }
-                        updateCount();
-                    } else if (cmd == "plus facility") {
-                        var cmdWhat = prompt("Which Kind:");
-                        if (cmdWhat == "cursor") {
-                            cmdPlus = prompt("How Many:");
-                            for (let i = 0; i < Number(cmdPlus); i++) {
-                                cursors++;
-                            }
-                            document.getElementById("cursor_count").innerHTML = cursors;
-                            clicksPSCursor = cursors * cursorMult;
-                            clicksPS = (clicksPSCursor+clicksPSDam + clicksPSVolcan);
-                            amountPS.innerHTML = clciksPS + " Units Per Second";
-                            cursorPrice = price(15, cursors);
-                            eleCursorPrice.innerHTML = cursorPrice + " Units";
-                        }
-                    }
-                }
-            };
+/* -------------------------
+   Main CPS tick
+------------------------- */
+setInterval(() => { clicks += clicksPS; updateUIAll(); saveGame(); }, 1000);
 
-            //tick function
-            function tick() {
-                for (let i = 0; i < clicksPS; i++) {
-                    clicks++;
-                }
-                updateCount();
-                timeout = setTimeout(tick, 1000);
-                //update colors
+/* -------------------------
+   Manual click
+------------------------- */
+document.getElementById('press').addEventListener('click', () => { clicks++; updateUIAll(); saveGame(); });
 
-                /*clicksPSCursor = cursors * cursorMult;
-                clicksPS = (clicksPSCursor + clicksPSDam +clicksPSVolcan + clicksPSWind);
-                amountPS.innerHTML = clicksPS + " Units Per Second";*/
-                
-            }
+/* -------------------------
+   Reset
+------------------------- */
+document.getElementById('reset').addEventListener('click', () => {
+  if(!confirm('Are you sure you want to reset?')) return;
+  clicks = 0;
+  cursors = dams = volcan = winds = suns = bios = nukes = 0;
+  cursorMult = damMult = volcanMult = windMult = sunMult = bioMult = nukeMult = 1;
+  updateUIAll();
+  saveGame();
+});
 
-            //update functions
-            function updateCount() {
-                if (clicks >= 1000000000) {
-                    amount.innerHTML = (clicks/1000000000).toFixed(2) + " Billion" + " Units of Energy";
-                } else if (clicks >= 1000000) {
-                    amount.innerHTML = (clicks/1000000).toFixed(2) + " Million" + " Units of Energy";
-                } else {
-                    amount.innerHTML = clicks + " Units of Energy";
-                }
-               
-            }
-            function updatePS() {
-                clicksPS = (clicksPSCursor + clicksPSDam + clicksPSVolcan + clicksPSWind + clicksPSSun + clicksPSBio + clicksPSNuke);
-                amountPS.innerHTML = clicksPS + " Units Per Second";
-            }
+/* -------------------------
+   Name edit & secret NLAE
+------------------------- */
+document.getElementById('name').addEventListener('click', () => {
+  let newname = prompt('New Name for Laboratory:');
+  if (!newname) return;
+  if(newname.length>28){ alert('Name too long!'); return; }
+  nameEl.textContent = newname+"'s Laboratory";
+  if(newname.toUpperCase()==="NLAE"){ console.info("Dev mode unlocked!"); }
+  saveGame();
+});
 
-            //general functions
-            function price(base, amount) {
-                return Math.ceil(base * (Math.pow(1.15, amount)));
-            }
-            function pricedater(element, theprice) {
-                if (theprice >= 1000000000) {
-                    element.innerHTMl = (theprice/1000000).toFixed(2) + "B Units";
-                } else if (theprice >= 1000000) {
-                    element.innerHTML = (theprice/1000000).toFixed(2) + "M Units";
-                } else {
-                    element.innerHTML = theprice + " Units";
-                }
-            }
+/* -------------------------
+   Store buy handlers
+------------------------- */
+function buyCursor(){ const cost = price(cursorBasePrice,cursors); if(clicks>=cost){ clicks-=cost; cursors++; updateUIAll(); saveGame(); } }
+function buyDam(){ const cost = price(damBasePrice,dams); if(clicks>=cost){ clicks-=cost; dams++; updateUIAll(); saveGame(); } }
+function buyGeo(){ const cost = price(volcanBasePrice,volcan); if(clicks>=cost){ clicks-=cost; volcan++; updateUIAll(); saveGame(); } }
+function buyWind(){ const cost = price(windBasePrice,winds); if(clicks>=cost){ clicks-=cost; winds++; updateUIAll(); saveGame(); } }
+function buySun(){ const cost = price(sunBasePrice,suns); if(clicks>=cost){ clicks-=cost; suns++; updateUIAll(); saveGame(); } }
+function buyBio(){ const cost = price(bioBasePrice,bios); if(clicks>=cost){ clicks-=cost; bios++; updateUIAll(); saveGame(); } }
+function buyNuke(){ const cost = price(nukeBasePrice,nukes); if(clicks>=cost){ clicks-=cost; nukes++; updateUIAll(); saveGame(); } }
 
-            //store functions
+document.getElementById('clicker').addEventListener('click', buyCursor);
+document.getElementById('hydro').addEventListener('click', buyDam);
+document.getElementById('geo').addEventListener('click', buyGeo);
+document.getElementById('wind').addEventListener('click', buyWind);
+document.getElementById('sun').addEventListener('click', buySun);
+document.getElementById('bio').addEventListener('click', buyBio);
+document.getElementById('nuke').addEventListener('click', buyNuke);
 
-            //buy clicker
-            document.getElementById("clicker").onclick = function() {
-                if (clicks >= cursorPrice) {
-                    clicks -= cursorPrice;
-                    updateCount();
-                    cursors ++;
-                    document.getElementById("cursor_count").innerHTML = cursors;
-                    cursorPrice = price(15, cursors);
-                    eleCursorPrice.innerHTML = cursorPrice + " Units";
-                    clicksPSCursor = parseInt(cursors) * parseInt(cursorMult);
-                    updatePS();
-                    
-                }
-            };
+/* -------------------------
+   Periodic autosave
+------------------------- */
+setInterval(saveGame,5000);
+window.addEventListener('beforeunload',saveGame);
+window.addEventListener('pagehide',saveGame);
+</script>
 
-            //buy dam
-            document.getElementById("hydro").onclick = function() {
-                if (clicks >= damPrice) {
-                    clicks -= damPrice;
-                    updateCount();
-                    dams++;
-                    document.getElementById("hydro_count").innerHTML = dams;
-                    damPrice = price(100, dams);
-                    eleDamPrice.innerHTML = damPrice + " Units";
-                    clicksPSDam = (parseInt(dams) * 5) * parseInt(damMult);
-                    updatePS();
-                }
-            };
-
-            //buy volcano
-            document.getElementById("geo").onclick = function() {
-                if (clicks >= geoprice) {
-                    clicks -= geoprice;
-                    updateCount();
-                    volcan++;
-                    document.getElementById("geo_count").innerHTML = volcan;
-                    geoprice = price(1100, volcan);
-                    eleVolcanPrice.innerHTML = geoprice + " Units";
-                    clicksPSVolcan = (volcan * 8) * volcanMult;
-                    updatePS();
-
-                }
-            };
-
-            //buy wind
-            document.getElementById("wind").onclick = function() {
-                if (clicks >= windPrice) {
-                    clicks -= windPrice;
-                    updateCount();
-                    winds++;
-                    document.getElementById("wind_count").innerHTML = winds;
-                    windPrice = price(12000, winds);
-                    eleWindPrice.innerHTML = windPrice + " Units";
-                    clicksPSWind = (winds * 47) * windMult;
-                    updatePS();
-                }
-            };
-            
-            //buy sun
-            document.getElementById("sun").onclick = function() {
-                if (clicks >= sunPrice) {
-                    clicks -= sunPrice;
-                    updateCount();
-                    suns++;
-                    document.getElementById("sun_count").innerHTML = suns;
-                    sunPrice = price(130000, suns);
-                    pricedater(eleSunPrice, sunPrice);
-                    clicksPSSun = (suns * 260) * sunMult;
-                    updatePS();
-                }
-            };
-            document.getElementById("bio").onclick = function() {
-                if (clicks >= bioPrice) {
-                    clicks -= bioPrice;
-                    updateCount();
-                    bios++;
-                    document.getElementById("bio_count").innerHTML = bios;
-                    bioPrice = price(1400000, bios);
-                    pricedater(eleBioPrice, bioPrice);
-                    clicksPSBio = (bios * 1400) * bioMult;
-                    updatePS();
-                }
-            };
-
-            //buy nuke
-            document.getElementById("nuke").onclick = function() {
-                if (clicks >= nukePrice) {
-                    clicks -= nukePrice;
-                    updateCount();
-                    nuke++;
-                    document.getElementById("nuke_count").innerHTML = nukes;
-                    nukePrice = price(20000000, nukes);
-                    pricedater(eleNukePrice, nukePrice);
-                    clicksPSNuke = (nukes * 7800) * nukeMult;
-                    updatePS();
-                }
-            };
-            
-        </script>
-    </body>
+</body>
 </html>
