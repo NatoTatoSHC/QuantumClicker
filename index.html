@@ -19,6 +19,8 @@
     #reset { cursor:pointer; user-select:none; padding:6px; display:inline-block; border-radius:6px; background:#eee; text-align:center; }
     #name { cursor:pointer; }
     #sep{cursor:pointer; display:inline-block; margin-left:6px;}
+    #upgrades {display: grid; grid-template-columns: 1fr 1fr 1fr 1fr;}
+    .upgrade {width: 1fr; border: 2px solid black;}
   </style>
 </head>
 <body>
@@ -38,7 +40,9 @@
   </section>
 
   <section id="right-panel">
-    <section id="upgrades">Upgrades go here</section>
+    <section id="upgrades">
+      <div class="upgrade"><img src="src/cursor.png"/>x1</div>
+    </section>
     <section id="store">
       <div class="buyitem" id="clicker"><img src="src/cursor.png" class="storeimg" alt=""><h1 class="storetext">Cursor</h1><div class="storecost" id="cursorprice">15 Units</div><div class="count" id="cursor_count">0</div></div>
       <div class="buyitem" id="hydro"><img src="src/dam.png" class="storeimg" alt=""><h1 class="storetext">Hydropower</h1><div class="storecost" id="hydroprice">100 Units</div><div class="count" id="hydro_count">0</div></div>
@@ -87,6 +91,7 @@ const eleBioPrice = document.getElementById('bioprice');
 const eleNukePrice = document.getElementById('nukeprice');
 
 const nameEl = document.getElementById('hname');
+
 
 /* -------------------------
    Utility functions
