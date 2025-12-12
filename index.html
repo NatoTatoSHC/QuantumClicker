@@ -53,8 +53,23 @@
       <div class="buyitem" id="nuke"><img src="src/nuke.png" class="storeimg" alt=""><h1 class="storetext">Nuclear</h1><div class="storecost" id="nukeprice">20.00M Units</div><div class="count" id="nuke_count">0</div></div>
     </section>
   </section>
-
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+  let client = window.supabase.createClient("https://jgjdxlulszliepzrhgff.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpnamR4bHVsc3psaWVwenJoZ2ZmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU0ODc1ODIsImV4cCI6MjA4MTA2MzU4Mn0.OWdRl6uqpdui33Jg0g1SRMS3oeKVDUOBsogBovVnq_I");
+  async function addcode(type) {
+    var user = prompt("What is Your Bank User Name");
+    var code = (Math.random() * 1000000).toString().replace(".", "");
+    alert("Your Code is: "+code);
+    const {data, error} = await client
+    .from("quantum_codes")
+    .upsert([
+      {
+        user: user,
+        code: code,
+        id: type
+      }
+    ]);
+  }
 /* -------------------------
    Game state
 ------------------------- */
@@ -212,13 +227,13 @@ document.getElementById('name').addEventListener('click', () => {
 /* -------------------------
    Store buy handlers
 ------------------------- */
-function buyCursor(){ const cost = price(cursorBasePrice,cursors); if(clicks>=cost){ clicks-=cost; cursors++; updateUIAll(); saveGame(); } }
-function buyDam(){ const cost = price(damBasePrice,dams); if(clicks>=cost){ clicks-=cost; dams++; updateUIAll(); saveGame(); } }
-function buyGeo(){ const cost = price(volcanBasePrice,volcan); if(clicks>=cost){ clicks-=cost; volcan++; updateUIAll(); saveGame(); } }
+function buyCursor(){ const cost = price(cursorBasePrice,cursors); if(clicks>=cost){ clicks-=cost; cursors++; updateUIAll(); saveGame(); if ([10, 50, 100, 500, 1000].includes(cursors)) {addcode(cursors+"c")} } }
+function buyDam(){ const cost = price(damBasePrice,dams); if(clicks>=cost){ clicks-=cost; dams++; updateUIAll(); saveGame(); if ([10, 50, 100, 500, 1000].includes(dams)) {addcode(dams+"h")}} }
+function buyGeo(){ const cost = price(volcanBasePrice,volcan); if(clicks>=cost){ clicks-=cost; volcan++; updateUIAll(); saveGame(); if ([50, 100, 500, 1000].includes(volcan)) {addcode(volcan+"g")}} }
 function buyWind(){ const cost = price(windBasePrice,winds); if(clicks>=cost){ clicks-=cost; winds++; updateUIAll(); saveGame(); } }
-function buySun(){ const cost = price(sunBasePrice,suns); if(clicks>=cost){ clicks-=cost; suns++; updateUIAll(); saveGame(); } }
+function buySun(){ const cost = price(sunBasePrice,suns); if(clicks>=cost){ clicks-=cost; suns++; updateUIAll(); saveGame(); if ([50, 100, 500, 1000].includes(suns)) {addcode(suns+"s")}} }
 function buyBio(){ const cost = price(bioBasePrice,bios); if(clicks>=cost){ clicks-=cost; bios++; updateUIAll(); saveGame(); } }
-function buyNuke(){ const cost = price(nukeBasePrice,nukes); if(clicks>=cost){ clicks-=cost; nukes++; updateUIAll(); saveGame(); } }
+function buyNuke(){ const cost = price(nukeBasePrice,nukes); if(clicks>=cost){ clicks-=cost; nukes++; updateUIAll(); saveGame(); if ([100, 1000, 1000000].includes(nukes)) {addcode(nukes+"n")}} }
 
 document.getElementById('clicker').addEventListener('click', buyCursor);
 document.getElementById('hydro').addEventListener('click', buyDam);
