@@ -31,7 +31,7 @@
     <h2 id="amountPS">0 Units Per Second</h2>
     <img id="press" src="src/quantum.png" alt="press">
     <div id="reset" title="Reset progress">&#8634; Reset</div>
-    <p id="version">Unfinished Version</p>
+    <p id="version">Version Alpha 26.1</p>
     <p id="info">Works on mobile & desktop</p>
   </section>
 
@@ -41,7 +41,6 @@
 
   <section id="right-panel">
     <section id="upgrades">
-      <div class="upgrade"><img src="src/cursor.png"/>x1</div>
     </section>
     <section id="store">
       <div class="buyitem" id="clicker"><img src="src/cursor.png" class="storeimg" alt=""><h1 class="storetext">Cursor</h1><div class="storecost" id="cursorprice">15 Units</div><div class="count" id="cursor_count">0</div></div>
@@ -85,6 +84,14 @@ let nukes = 0, nukeMult = 1, nukeBasePrice = 20000000;
 
 let clicksPS = 0;
 
+let possibleUpgrades = {
+  cursor:{
+    10: {mult:2, price:100, used:false},
+    25: {mult:3, price:250, used:false},
+    50: {mult:4, price:500, used:false}
+  }
+}
+
 /* DOM elements */
 const amountEl = document.getElementById('amount');
 const amountPSEl = document.getElementById('amountPS');
@@ -106,6 +113,8 @@ const eleBioPrice = document.getElementById('bioprice');
 const eleNukePrice = document.getElementById('nukeprice');
 
 const nameEl = document.getElementById('hname');
+
+const upgrades = document.getElementsByClassName("upgrade");
 
 
 /* -------------------------
@@ -156,7 +165,7 @@ function updateUIAll() {
    Save / Load
 ------------------------- */
 function saveGame() {
-  const state = {clicks,cursors,cursorMult,dams,damMult,volcan,volcanMult,winds,windMult,suns,sunMult,bios,bioMult,nukes,nukeMult,name:nameEl.textContent};
+  const state = {clicks,cursors,cursorMult,dams,damMult,volcan,volcanMult,winds,windMult,suns,sunMult,bios,bioMult,nukes,nukeMult,name:nameEl.textContent,possibleUpgrades};
   try { localStorage.setItem('quantum_clicker_v1', JSON.stringify(state)); } catch(e){ console.warn('Save failed',e);}
 }
 
@@ -181,6 +190,7 @@ function loadGame() {
     nukes = Number(s.nukes||0);
     nukeMult = Number(s.nukeMult||1);
     if (s.name) nameEl.textContent = s.name;
+    possibleUpgrades = s.possibleUpgrades||possibleUpgrades;
   } catch(e){ console.warn('Load failed',e); }
 }
 
@@ -242,6 +252,18 @@ document.getElementById('wind').addEventListener('click', buyWind);
 document.getElementById('sun').addEventListener('click', buySun);
 document.getElementById('bio').addEventListener('click', buyBio);
 document.getElementById('nuke').addEventListener('click', buyNuke);
+
+for (let each = 0; each < upgrades.length; each++) {
+  let grade = upgrades.item(each);
+  grade.addEventListener('click', () => {
+    switch(grade.getAttribute("name")) {
+      case 'cursor':
+        cursorMult *= parseInt(grade.id);
+        break;
+    }
+    grade.style.display = "none";
+  });
+}
 
 /* -------------------------
    Periodic autosave
