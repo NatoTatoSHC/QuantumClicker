@@ -299,7 +299,7 @@ function upgrade(struct) {
     possibleUpgrades[struct][nextNum] = nextData;
   }
   Object.keys(possibleUpgrades[struct]).forEach(amo => {
-    if ((eval(struct+"s")||eval(struct+"s")) >= amo) {
+    if ((eval(struct+"s")||eval(struct)) >= amo) {
       let ele = document.createElement("div");
       ele.className = "upgrade";
       ele.setAttribute("name", struct);
