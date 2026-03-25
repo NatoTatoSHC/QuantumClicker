@@ -30,7 +30,7 @@
     <h2 id="amountPS">0 Units Per Second</h2>
     <img id="press" src="src/quantum.png" alt="press">
     <div id="reset" title="Reset progress">&#8634; Reset</div>
-    <p id="version">Version 26.3.1</p>
+    <p id="version">Version 26.3.2</p>
     <p id="info">Works on mobile & desktop</p>
   </section>
 
@@ -148,7 +148,6 @@ const eleNukePrice = document.getElementById('nukeprice');
 
 const nameEl = document.getElementById('hname');
 
-const upgrades = document.getElementsByClassName("upgrade");
 const upgradePanel = document.getElementById("upgrades");
 
 
@@ -227,7 +226,7 @@ function loadGame() {
     if (s.name) nameEl.textContent = s.name;
     possibleUpgrades = s.possibleUpgrades||JSON.parse(JSON.stringify(baseUpgrades));
     upgradePanel.innerHTML = s.uppcont||"";
-    upgrade("cursor");
+    upgrade("volcan");
   } catch(e){ console.warn('Load failed',e); }
 }
 
@@ -252,7 +251,7 @@ document.getElementById('press').addEventListener('click', () => { clicks++; upd
 ------------------------- */
 document.getElementById('reset').addEventListener('click', () => {
   if(!confirm('Are you sure you want to reset?')) return;
-  clicks = 1000;
+  clicks = 0;
   cursors = dams = volcan = winds = suns = bios = nukes = 0;
   cursorMult = damMult = volcanMult = windMult = sunMult = bioMult = nukeMult = 1;
   possibleUpgrades = JSON.parse(JSON.stringify(baseUpgrades));
@@ -313,6 +312,7 @@ function upgrade(struct) {
       delete possibleUpgrades[struct][amo];
     }
   });
+  const upgrades = document.getElementsByClassName("upgrade");
   for (let each = 0; each < upgrades.length; each++) {
     let grade = upgrades.item(each);
     grade.addEventListener('click', () => {
