@@ -26,12 +26,11 @@
 <body>
   <section id="left-panel">
     <div id="name"><h1 id="hname">NOT LOADED</h1></div>
-    <!---<div id="sep" title="Dev console">⚙️</div>--->
     <h1 id="amount">0 Units of Energy</h1>
     <h2 id="amountPS">0 Units Per Second</h2>
     <img id="press" src="src/quantum.png" alt="press">
     <div id="reset" title="Reset progress">&#8634; Reset</div>
-    <p id="version">Version Alpha 26.1</p>
+    <p id="version">Version 26.3.1</p>
     <p id="info">Works on mobile & desktop</p>
   </section>
 
@@ -84,12 +83,47 @@ let nukes = 0, nukeMult = 1, nukeBasePrice = 20000000;
 
 let clicksPS = 0;
 
-let possibleUpgrades = {
+let baseUpgrades = {
+  biggest:{cursor:25, dam:25, volcan:25, wind:25, sun:25, bio:25, nuke:25},
   cursor:{
     10: {mult:2, price:100, used:false},
-    25: {mult:3, price:250, used:false},
-    50: {mult:4, price:500, used:false}
+    25: {mult:3, price:250, used:false}
+  },
+  dam:{
+    10: {mult:2, price:200, used:false},
+    25: {mult:3, price:500, used:false}
+  },
+  volcan:{
+    10: {mult:2, price:300, used:false},
+    25: {mult:3, price:750, used:false}
+  },
+  wind:{
+    10: {mult:2, price:400, used:false},
+    25: {mult:3, price:1000, used:false}
+  },
+  sun:{
+    10: {mult:2, price:500, used:false},
+    25: {mult:3, price:1250, used:false}
+  },
+  bio:{
+    10: {mult:2, price:600, used:false},
+    25: {mult:3, price:1500, used:false}
+  },
+  nuke:{
+    10: {mult:2, price:700, used:false},
+    25: {mult:3, price:1750, used:false}
   }
+}
+let possibleUpgrades = JSON.parse(JSON.stringify(baseUpgrades));
+
+const structureUpgradePriceMultiplier = {
+  'cursor':1,
+  "dam":2,
+  "volcan":3,
+  "wind":4,
+  "sun":5,
+  "bio":6,
+  "nuke":7
 }
 
 /* DOM elements */
@@ -115,6 +149,7 @@ const eleNukePrice = document.getElementById('nukeprice');
 const nameEl = document.getElementById('hname');
 
 const upgrades = document.getElementsByClassName("upgrade");
+const upgradePanel = document.getElementById("upgrades");
 
 
 /* -------------------------
@@ -165,7 +200,7 @@ function updateUIAll() {
    Save / Load
 ------------------------- */
 function saveGame() {
-  const state = {clicks,cursors,cursorMult,dams,damMult,volcan,volcanMult,winds,windMult,suns,sunMult,bios,bioMult,nukes,nukeMult,name:nameEl.textContent,possibleUpgrades};
+  const state = {clicks,cursors,cursorMult,dams,damMult,volcan,volcanMult,winds,windMult,suns,sunMult,bios,bioMult,nukes,nukeMult,name:nameEl.textContent,possibleUpgrades,uppcont:upgradePanel.innerHTML};
   try { localStorage.setItem('quantum_clicker_v1', JSON.stringify(state)); } catch(e){ console.warn('Save failed',e);}
 }
 
@@ -190,7 +225,9 @@ function loadGame() {
     nukes = Number(s.nukes||0);
     nukeMult = Number(s.nukeMult||1);
     if (s.name) nameEl.textContent = s.name;
-    possibleUpgrades = s.possibleUpgrades||possibleUpgrades;
+    possibleUpgrades = s.possibleUpgrades||JSON.parse(JSON.stringify(baseUpgrades));
+    upgradePanel.innerHTML = s.uppcont||"";
+    upgrade("cursor");
   } catch(e){ console.warn('Load failed',e); }
 }
 
@@ -203,7 +240,7 @@ updateUIAll();
 /* -------------------------
    Main CPS tick
 ------------------------- */
-setInterval(() => { clicks += clicksPS; updateUIAll(); saveGame(); }, 1000);
+setInterval(() => { clicks += clicksPS; updateUIAll(); saveGame();}, 1000);
 
 /* -------------------------
    Manual click
@@ -215,9 +252,11 @@ document.getElementById('press').addEventListener('click', () => { clicks++; upd
 ------------------------- */
 document.getElementById('reset').addEventListener('click', () => {
   if(!confirm('Are you sure you want to reset?')) return;
-  clicks = 0;
+  clicks = 1000;
   cursors = dams = volcan = winds = suns = bios = nukes = 0;
   cursorMult = damMult = volcanMult = windMult = sunMult = bioMult = nukeMult = 1;
+  possibleUpgrades = JSON.parse(JSON.stringify(baseUpgrades));
+  upgradePanel.innerHTML = "";
   updateUIAll();
   saveGame();
 });
@@ -237,10 +276,10 @@ document.getElementById('name').addEventListener('click', () => {
 /* -------------------------
    Store buy handlers
 ------------------------- */
-function buyCursor(){ const cost = price(cursorBasePrice,cursors); if(clicks>=cost){ clicks-=cost; cursors++; updateUIAll(); saveGame(); if ([10, 50, 100, 500, 1000].includes(cursors)) {addcode(cursors+"c")} } }
-function buyDam(){ const cost = price(damBasePrice,dams); if(clicks>=cost){ clicks-=cost; dams++; updateUIAll(); saveGame(); if ([10, 50, 100, 500, 1000].includes(dams)) {addcode(dams+"h")}} }
-function buyGeo(){ const cost = price(volcanBasePrice,volcan); if(clicks>=cost){ clicks-=cost; volcan++; updateUIAll(); saveGame(); if ([50, 100, 500, 1000].includes(volcan)) {addcode(volcan+"g")}} }
-function buyWind(){ const cost = price(windBasePrice,winds); if(clicks>=cost){ clicks-=cost; winds++; updateUIAll(); saveGame(); } }
+function buyCursor(){ const cost = price(cursorBasePrice,cursors); if(clicks>=cost){ clicks-=cost; cursors++; updateUIAll(); saveGame(); if ([10, 50, 100, 500, 1000].includes(cursors)) {addcode(cursors+"c")}} upgrade("cursor"); }
+function buyDam(){ const cost = price(damBasePrice,dams); if(clicks>=cost){ clicks-=cost; dams++; updateUIAll(); saveGame(); if ([10, 50, 100, 500, 1000].includes(dams)) {addcode(dams+"h")}} upgrade("dam"); }
+function buyGeo(){ const cost = price(volcanBasePrice,volcan); if(clicks>=cost){ clicks-=cost; volcan++; updateUIAll(); saveGame(); if ([50, 100, 500, 1000].includes(volcan)) {addcode(volcan+"g")}} upgrade("volcan"); }
+function buyWind(){ const cost = price(windBasePrice,winds); if(clicks>=cost){ clicks-=cost; winds++; updateUIAll(); saveGame(); } upgrade("wind"); }
 function buySun(){ const cost = price(sunBasePrice,suns); if(clicks>=cost){ clicks-=cost; suns++; updateUIAll(); saveGame(); if ([50, 100, 500, 1000].includes(suns)) {addcode(suns+"s")}} }
 function buyBio(){ const cost = price(bioBasePrice,bios); if(clicks>=cost){ clicks-=cost; bios++; updateUIAll(); saveGame(); } }
 function buyNuke(){ const cost = price(nukeBasePrice,nukes); if(clicks>=cost){ clicks-=cost; nukes++; updateUIAll(); saveGame(); if ([100, 1000, 1000000].includes(nukes)) {addcode(nukes+"n")}} }
@@ -253,17 +292,58 @@ document.getElementById('sun').addEventListener('click', buySun);
 document.getElementById('bio').addEventListener('click', buyBio);
 document.getElementById('nuke').addEventListener('click', buyNuke);
 
-for (let each = 0; each < upgrades.length; each++) {
-  let grade = upgrades.item(each);
-  grade.addEventListener('click', () => {
-    switch(grade.getAttribute("name")) {
-      case 'cursor':
-        cursorMult *= parseInt(grade.id);
-        break;
+function upgrade(struct) {
+  if (Object.values(possibleUpgrades[struct]).length < 3) {
+    let nextNum = possibleUpgrades.biggest[struct] +25;
+    let nextData = {mult: (nextNum/25)+2, price:nextNum*10*structureUpgradePriceMultiplier[struct], used:false};
+    possibleUpgrades.biggest[struct] = nextNum;
+    possibleUpgrades[struct][nextNum] = nextData;
+  }
+  Object.keys(possibleUpgrades[struct]).forEach(amo => {
+    if ((eval(struct+"s")||eval(struct+"s")) >= amo) {
+      let ele = document.createElement("div");
+      ele.className = "upgrade";
+      ele.setAttribute("name", struct);
+      ele.id = possibleUpgrades[struct][amo].mult;
+      let img = new Image();
+      img.src = "./src/"+struct+".png";
+      img.style.width = "100%";
+      ele.append(img);
+      upgradePanel.appendChild(ele);
+      delete possibleUpgrades[struct][amo];
     }
-    grade.style.display = "none";
   });
+  for (let each = 0; each < upgrades.length; each++) {
+    let grade = upgrades.item(each);
+    grade.addEventListener('click', () => {
+      switch(grade.getAttribute("name")) {
+        case 'cursor':
+          cursorMult = parseInt(grade.id);
+          break;
+        case 'dam':
+          damMult = parseInt(grade.id);
+          break;
+        case 'volcan':
+          volcanMult = parseInt(grade.id);
+          break;
+        case 'wind':
+          windMult = parseInt(grade.id);
+          break;
+        case 'sun':
+          sunMult = parseInt(grade.id);
+          break;
+        case 'bio':
+          bioMult = parseInt(grade.id);
+          break;
+        case 'nuke':
+          nukeMult = parseInt(grade.id);
+          break;
+      }
+      grade.style.display = "none";
+    });
+  }
 }
+
 
 /* -------------------------
    Periodic autosave
