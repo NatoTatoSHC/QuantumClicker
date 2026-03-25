@@ -226,7 +226,7 @@ function loadGame() {
     if (s.name) nameEl.textContent = s.name;
     possibleUpgrades = s.possibleUpgrades||JSON.parse(JSON.stringify(baseUpgrades));
     upgradePanel.innerHTML = s.uppcont||"";
-    upgrade("volcan");
+    upgrade("cursor");
   } catch(e){ console.warn('Load failed',e); }
 }
 
