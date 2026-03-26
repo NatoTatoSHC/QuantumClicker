@@ -30,7 +30,7 @@
     <h2 id="amountPS">0 Units Per Second</h2>
     <img id="press" src="src/quantum.png" alt="press">
     <div id="reset" title="Reset progress">&#8634; Reset</div>
-    <p id="version">Version 26.3.2</p>
+    <p id="version">Version 26.3.3</p>
     <p id="info">Works on mobile & desktop</p>
   </section>
 
@@ -75,7 +75,7 @@ let clicks = 0;
 
 let cursors = 0, cursorMult = 1, cursorBasePrice = 15;
 let dams = 0, damMult = 1, damBasePrice = 100;
-let volcan = 0, volcanMult = 1, volcanBasePrice = 1100;
+let volcans = 0, volcanMult = 1, volcanBasePrice = 1100;
 let winds = 0, windMult = 1, windBasePrice = 12000;
 let suns = 0, sunMult = 1, sunBasePrice = 130000;
 let bios = 0, bioMult = 1, bioBasePrice = 1400000;
@@ -169,7 +169,7 @@ function updateUIAll() {
   amountEl.textContent = formatBig(clicks) + " Units of Energy";
   cursorCountEl.textContent = cursors;
   damCountEl.textContent = dams;
-  geoCountEl.textContent = volcan;
+  geoCountEl.textContent = volcans;
   windCountEl.textContent = winds;
   sunCountEl.textContent = suns;
   bioCountEl.textContent = bios;
@@ -177,7 +177,7 @@ function updateUIAll() {
 
   eleCursorPrice.textContent = formatBig(price(cursorBasePrice, cursors)) + " Units";
   eleDamPrice.textContent = formatBig(price(damBasePrice, dams)) + " Units";
-  eleVolcanPrice.textContent = formatBig(price(volcanBasePrice, volcan)) + " Units";
+  eleVolcanPrice.textContent = formatBig(price(volcanBasePrice, volcans)) + " Units";
   eleWindPrice.textContent = formatBig(price(windBasePrice, winds)) + " Units";
   eleSunPrice.textContent = formatBig(price(sunBasePrice, suns)) + " Units";
   eleBioPrice.textContent = formatBig(price(bioBasePrice, bios)) + " Units";
@@ -186,7 +186,7 @@ function updateUIAll() {
   // Recalculate CPS
   clicksPS = cursors * cursorMult +
              dams * 5 * damMult +
-             volcan * 8 * volcanMult +
+             volcans * 8 * volcanMult +
              winds * 47 * windMult +
              suns * 260 * sunMult +
              bios * 1400 * bioMult +
@@ -199,7 +199,7 @@ function updateUIAll() {
    Save / Load
 ------------------------- */
 function saveGame() {
-  const state = {clicks,cursors,cursorMult,dams,damMult,volcan,volcanMult,winds,windMult,suns,sunMult,bios,bioMult,nukes,nukeMult,name:nameEl.textContent,possibleUpgrades,uppcont:upgradePanel.innerHTML};
+  const state = {clicks,cursors,cursorMult,dams,damMult,volcan:volcans,volcanMult,winds,windMult,suns,sunMult,bios,bioMult,nukes,nukeMult,name:nameEl.textContent,possibleUpgrades,uppcont:upgradePanel.innerHTML};
   try { localStorage.setItem('quantum_clicker_v1', JSON.stringify(state)); } catch(e){ console.warn('Save failed',e);}
 }
 
@@ -213,7 +213,7 @@ function loadGame() {
     cursorMult = Number(s.cursorMult||1);
     dams = Number(s.dams||0);
     damMult = Number(s.damMult||1);
-    volcan = Number(s.volcan||0);
+    volcans = Number(s.volcan||0);
     volcanMult = Number(s.volcanMult||1);
     winds = Number(s.winds||0);
     windMult = Number(s.windMult||1);
@@ -251,8 +251,8 @@ document.getElementById('press').addEventListener('click', () => { clicks++; upd
 ------------------------- */
 document.getElementById('reset').addEventListener('click', () => {
   if(!confirm('Are you sure you want to reset?')) return;
-  clicks = 0;
-  cursors = dams = volcan = winds = suns = bios = nukes = 0;
+  clicks = 10000000;
+  cursors = dams = volcans = winds = suns = bios = nukes = 0;
   cursorMult = damMult = volcanMult = windMult = sunMult = bioMult = nukeMult = 1;
   possibleUpgrades = JSON.parse(JSON.stringify(baseUpgrades));
   upgradePanel.innerHTML = "";
@@ -277,7 +277,7 @@ document.getElementById('name').addEventListener('click', () => {
 ------------------------- */
 function buyCursor(){ const cost = price(cursorBasePrice,cursors); if(clicks>=cost){ clicks-=cost; cursors++; updateUIAll(); saveGame(); if ([10, 50, 100, 500, 1000].includes(cursors)) {addcode(cursors+"c")}} upgrade("cursor"); }
 function buyDam(){ const cost = price(damBasePrice,dams); if(clicks>=cost){ clicks-=cost; dams++; updateUIAll(); saveGame(); if ([10, 50, 100, 500, 1000].includes(dams)) {addcode(dams+"h")}} upgrade("dam"); }
-function buyGeo(){ const cost = price(volcanBasePrice,volcan); if(clicks>=cost){ clicks-=cost; volcan++; updateUIAll(); saveGame(); if ([50, 100, 500, 1000].includes(volcan)) {addcode(volcan+"g")}} upgrade("volcan"); }
+function buyGeo(){ const cost = price(volcanBasePrice,volcans); if(clicks>=cost){ clicks-=cost; volcans++; updateUIAll(); saveGame(); if ([50, 100, 500, 1000].includes(volcans)) {addcode(volcans+"g")}} upgrade("volcan"); }
 function buyWind(){ const cost = price(windBasePrice,winds); if(clicks>=cost){ clicks-=cost; winds++; updateUIAll(); saveGame(); } upgrade("wind"); }
 function buySun(){ const cost = price(sunBasePrice,suns); if(clicks>=cost){ clicks-=cost; suns++; updateUIAll(); saveGame(); if ([50, 100, 500, 1000].includes(suns)) {addcode(suns+"s")}} }
 function buyBio(){ const cost = price(bioBasePrice,bios); if(clicks>=cost){ clicks-=cost; bios++; updateUIAll(); saveGame(); } }
