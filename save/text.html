@@ -1,0 +1,20 @@
+<html>
+    <head>
+        <title>Text</title>
+    </head>
+    <body>
+        <h1>You Have Chosen Dea- TEXT!</h1>
+        <input type="text" autocomplete="off" id="code">
+        <button onclick="save();">Submit</button>
+        <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+        <script>
+            const inp = document.getElementById("code");
+            let client = supabase.createClient("https://ywsbaxwlytkjkzhyfzqr.supabase.co", "sb_publishable_C6rZSBHWegX7bzcsv7OGFg_PgJkqTC0");
+            async function save() {
+                let {data, error} = await client.from("quantum-accounts").select("*").upsert([{"id":barcodes[0].rawValue, "data":JSON.parse(localStorage.getItem("quantum_clicker_v1"))}]);
+                alert("Saved: "+ inp.value);
+                location.assign("../");
+            }
+        </script>
+    </body>
+</html>

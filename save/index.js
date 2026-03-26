@@ -25,7 +25,7 @@ const client = supabase.createClient("https://ywsbaxwlytkjkzhyfzqr.supabase.co",
           const barcodes = await barcodeDetector.detect(video); // Detect barcodes
           if (barcodes.length > 0) {
             let {data, error} = await client.from("quantum-accounts").upsert([{"id":barcodes[0].rawValue, "data":JSON.parse(localStorage.getItem("quantum_clicker_v1"))}]);
-            alert("Saved");
+            alert("Saved: "+barcodes[0].rawValue);
           }
         } catch (err) {
           console.error("Error detecting barcode:", err);
