@@ -27,7 +27,7 @@ const client = supabase.createClient("https://ywsbaxwlytkjkzhyfzqr.supabase.co",
             let {data, error} = await client.from("quantum-accounts").select("*").eq("id", barcodes[0].rawValue);
             data.forEach(dati => {
               localStorage.setItem("quantum_clicker_v1", JSON.stringify(dati.data));
-              alert("Loaded");
+              alert("Loaded: "+ barcodes[0].rawValue);
             });
           }
         } catch (err) {
