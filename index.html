@@ -253,6 +253,7 @@ document.getElementById('press').addEventListener('click', () => { clicks++; upd
 ------------------------- */
 document.getElementById('reset').addEventListener('click', () => {
   if(!confirm('Are you sure you want to reset?')) return;
+  nameEl.textContent = "Default's Laboratory";
   clicks = 0;
   cursors = dams = volcans = winds = suns = bios = nukes = 0;
   cursorMult = damMult = volcanMult = windMult = sunMult = bioMult = nukeMult = 1;
@@ -301,7 +302,7 @@ function upgrade(struct) {
     possibleUpgrades[struct][nextNum] = nextData;
   }
   Object.keys(possibleUpgrades[struct]).forEach(amo => {
-    if ((eval(struct+"s")||eval(struct)) >= amo) {
+    if ((eval(struct+"s")) >= amo) {
       let ele = document.createElement("div");
       ele.className = "upgrade";
       ele.setAttribute("name", struct);
