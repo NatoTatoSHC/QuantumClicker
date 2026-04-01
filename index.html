@@ -112,7 +112,9 @@
     let {data, error} = await clientshc.from("quantum-rewards").select("*").eq("code", code);
     data.forEach(dati => {
       eval(`${dati.var} += ${dati.amount}`);
-      upgrade(dati.var.slice(0, -1));
+      if (dati.var != "clicks") {
+        upgrade(dati.var.slice(0, -1));
+      }
     });
     await clientshc.from("quantum-rewards").delete().eq("code", code);
   }
