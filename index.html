@@ -225,7 +225,9 @@ function formatBig(n) {
 }
 
 function updateUIAll() {
-  account.textContent = locData.username;
+  if (locData) {
+    account.textContent = locData.username;
+  }
   amountEl.textContent = formatBig(clicks) + " Units of Energy";
   cursorCountEl.textContent = cursors;
   damCountEl.textContent = dams;
