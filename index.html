@@ -35,6 +35,7 @@
     <div id="reset" onclick="location.assign('./load')" style="position: relative; left: 0;">Load</div>
     <div id="reset" onclick="location.assign('./save')" style="position: relative; right:0;">save</div>
     <div id="reset" onclick="location.assign('./login.html')" style="position: relative; right:0;">Login</div>
+    <div id="reset" onclick="redeem();" style="position: relative; right:0;">Redeem</div>
   </section>
 
   <section id="mid-zone">
@@ -57,19 +58,63 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
   let client = window.supabase.createClient("https://jgjdxlulszliepzrhgff.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpnamR4bHVsc3psaWVwenJoZ2ZmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU0ODc1ODIsImV4cCI6MjA4MTA2MzU4Mn0.OWdRl6uqpdui33Jg0g1SRMS3oeKVDUOBsogBovVnq_I");
-  async function addcode(type) {
-    var user = prompt("What is Your Bank User Name");
-    var code = (Math.random() * 1000000).toString().replace(".", "");
-    alert("Your Code is: "+code);
-    const {data, error} = await client
-    .from("quantum_codes")
-    .upsert([
-      {
-        user: user,
-        code: code,
-        id: type
+  let clientshc = supabase.createClient("https://ywsbaxwlytkjkzhyfzqr.supabase.co", "sb_publishable_C6rZSBHWegX7bzcsv7OGFg_PgJkqTC0");
+  let safe;
+  let locData = JSON.parse(localStorage.getItem("login"));
+  async function check() {
+    let {data, error} = await clientshc.from("reward-accounts").select("*").eq("username", locData.username);
+    data.forEach(dati => {
+      if (dati.password != locData.password) {
+        safe = false;
+      } else {
+        safe = true;
       }
-    ]);
+    });
+  }
+  async function increasePoints(amount) {
+    let oldPointsData;
+    let {data, error} = await clientshc.from("reward-accounts").select("*").eq("username", locData.username);
+    data.forEach(dati => {
+      oldPointsData = dati.data;
+    });
+    oldPointsData.points += amount;
+    await clientshc.from("reward-accounts").update([{data:oldPointsData}]).eq("username", locData.username);
+  }
+  async function addcode(amount, type) {
+    if (localStorage.getItem("login")) {
+      await check();
+      if (safe) {
+        switch(type) {
+          case "c":
+            increasePoints(amount*structureUpgradePriceMultiplier.cursor);
+            break;
+          case "h":
+            increasePoints(amount*structureUpgradePriceMultiplier.dam);
+            break;
+          case "g":
+            increasePoints(amount*structureUpgradePriceMultiplier.volcan);
+            break;
+          case "s":
+            increasePoints(amount*structureUpgradePriceMultiplier.sun);
+            break;
+          case "n":
+            increasePoints(amount*structureUpgradePriceMultiplier.nuke*1.25);
+            break;
+          case "cl":
+            increasePoints(amount*.75);
+            break;
+        }
+      }
+    }
+  }
+  async function redeem() {
+    let code = prompt("What is your code");
+    let {data, error} = await clientshc.from("quantum-rewards").select("*").eq("code", code);
+    data.forEach(dati => {
+      eval(`${dati.var} += ${dati.amount}`);
+      upgrade(dati.var.slice(0, -1));
+    });
+    await clientshc.from("quantum-rewards").delete().eq("code", code);
   }
 /* -------------------------
    Game state
@@ -162,6 +207,13 @@ function price(base, amountOwned) {
 }
 
 function formatBig(n) {
+  if (n >= 1e30) return (n / 1e30).toFixed(2) + "Dc";
+  if (n >= 1e27) return (n / 1e27).toFixed(2) + "No";
+  if (n >= 1e24) return (n / 1e24).toFixed(2) + "Oc";
+  if (n >= 1e21) return (n / 1e21).toFixed(2) + "Sp";
+  if (n >= 1e18) return (n / 1e18).toFixed(2) + "Sx";
+  if (n >= 1e15) return (n / 1e15).toFixed(2) + "Qn";
+  if (n >= 1e12) return (n / 1e12).toFixed(2) + "Qd";
   if (n >= 1e9) return (n / 1e9).toFixed(2) + "B";
   if (n >= 1e6) return (n / 1e6).toFixed(2) + "M";
   if (n >= 1e3) return (n / 1e3).toFixed(2) + "k";
@@ -279,13 +331,13 @@ document.getElementById('name').addEventListener('click', () => {
 /* -------------------------
    Store buy handlers
 ------------------------- */
-function buyCursor(){ const cost = price(cursorBasePrice,cursors); if(clicks>=cost){ clicks-=cost; cursors++; updateUIAll(); saveGame(); if ([10, 50, 100, 500, 1000].includes(cursors)) {addcode(cursors+"c")}} upgrade("cursor"); }
-function buyDam(){ const cost = price(damBasePrice,dams); if(clicks>=cost){ clicks-=cost; dams++; updateUIAll(); saveGame(); if ([10, 50, 100, 500, 1000].includes(dams)) {addcode(dams+"h")}} upgrade("dam"); }
-function buyGeo(){ const cost = price(volcanBasePrice,volcans); if(clicks>=cost){ clicks-=cost; volcans++; updateUIAll(); saveGame(); if ([50, 100, 500, 1000].includes(volcans)) {addcode(volcans+"g")}} upgrade("volcan"); }
+function buyCursor(){ const cost = price(cursorBasePrice,cursors); if(clicks>=cost){ clicks-=cost; cursors++; updateUIAll(); saveGame(); if ([10, 50, 100, 500, 1000].includes(cursors)) {addcode(cursors,"c")}} upgrade("cursor"); }
+function buyDam(){ const cost = price(damBasePrice,dams); if(clicks>=cost){ clicks-=cost; dams++; updateUIAll(); saveGame(); if ([10, 50, 100, 500, 1000].includes(dams)) {addcode(dams,"h")}} upgrade("dam"); }
+function buyGeo(){ const cost = price(volcanBasePrice,volcans); if(clicks>=cost){ clicks-=cost; volcans++; updateUIAll(); saveGame(); if ([50, 100, 500, 1000].includes(volcans)) {addcode(volcans,"g")}} upgrade("volcan"); }
 function buyWind(){ const cost = price(windBasePrice,winds); if(clicks>=cost){ clicks-=cost; winds++; updateUIAll(); saveGame(); } upgrade("wind"); }
-function buySun(){ const cost = price(sunBasePrice,suns); if(clicks>=cost){ clicks-=cost; suns++; updateUIAll(); saveGame(); if ([50, 100, 500, 1000].includes(suns)) {addcode(suns+"s")}} upgrade("sun"); }
+function buySun(){ const cost = price(sunBasePrice,suns); if(clicks>=cost){ clicks-=cost; suns++; updateUIAll(); saveGame(); if ([50, 100, 500, 1000].includes(suns)) {addcode(suns,"s")}} upgrade("sun"); }
 function buyBio(){ const cost = price(bioBasePrice,bios); if(clicks>=cost){ clicks-=cost; bios++; updateUIAll(); saveGame(); } upgrade("bio") }
-function buyNuke(){ const cost = price(nukeBasePrice,nukes); if(clicks>=cost){ clicks-=cost; nukes++; updateUIAll(); saveGame(); if ([100, 1000, 1000000].includes(nukes)) {addcode(nukes+"n")}} upgrade("nuke"); }
+function buyNuke(){ const cost = price(nukeBasePrice,nukes); if(clicks>=cost){ clicks-=cost; nukes++; updateUIAll(); saveGame(); if ([100, 1000, 1000000].includes(nukes)) {addcode(nukes,"n")}} upgrade("nuke"); }
 
 document.getElementById('clicker').addEventListener('click', buyCursor);
 document.getElementById('hydro').addEventListener('click', buyDam);
