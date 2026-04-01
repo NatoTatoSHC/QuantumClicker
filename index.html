@@ -36,6 +36,7 @@
     <div id="reset" onclick="location.assign('./save')" style="position: relative; right:0;">save</div>
     <div id="reset" onclick="location.assign('./login.html')" style="position: relative; right:0;">Login</div>
     <div id="reset" onclick="redeem();" style="position: relative; right:0;">Redeem</div>
+    <p id="account_name"></p>
   </section>
 
   <section id="mid-zone">
@@ -108,7 +109,7 @@
     }
   }
   async function redeem() {
-    let code = prompt("What is your code");
+    let code = prompt("What is your code\n(If you forgot it then email support and tell them your problem and include your username and passwrod for verification.)");
     let {data, error} = await clientshc.from("quantum-rewards").select("*").eq("code", code);
     data.forEach(dati => {
       eval(`${dati.var} += ${dati.amount}`);
@@ -199,6 +200,7 @@ const eleNukePrice = document.getElementById('nukeprice');
 const nameEl = document.getElementById('hname');
 
 const upgradePanel = document.getElementById("upgrades");
+const account = document.getElementById("account_name");
 
 
 /* -------------------------
@@ -223,6 +225,7 @@ function formatBig(n) {
 }
 
 function updateUIAll() {
+  account.textContent = locData.username;
   amountEl.textContent = formatBig(clicks) + " Units of Energy";
   cursorCountEl.textContent = cursors;
   damCountEl.textContent = dams;
